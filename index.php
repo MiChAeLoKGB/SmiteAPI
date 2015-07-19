@@ -2,8 +2,22 @@
 
 include_once "smite.class.php";
 
+// database settings
+$db_host = "";
+$db_port = "";
+$db_user = "";
+$db_pass = "";
+$db_name = "";
+
+// Create DB connection
+$conn = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
+unset($db_host, $db_port, $db_user, $db_pass);
+
+
 // Get session from database. Change this for your own DB call.
-$get_session = dbarray(dbquery("SELECT * FROM ".DB_SMITE_API." WHERE id='1'"));
+$get_session = $conn->query("SELECT * FROM ".DB_SMITE_API." WHERE id='1'");
+$get_session->fetch_assoc();
+
 if ($get_session['timestamp'] <= time()){ 
 	$session = ""; // Empty session will force class to instantly create a new one
 }else{
