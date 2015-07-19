@@ -1,7 +1,5 @@
 <?php
 
-include_once "smite.class.php";
-
 // database settings
 $db_host = "";
 $db_port = "";
@@ -12,6 +10,9 @@ $db_name = "";
 // Create DB connection
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
 unset($db_host, $db_port, $db_user, $db_pass);
+
+
+include_once "smite.class.php";
 
 
 // Get session from database. Change this for your own DB call.
