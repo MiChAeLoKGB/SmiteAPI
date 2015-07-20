@@ -3,7 +3,7 @@
 |   Filename: smite-api.class.php  
 |   Author: MiChAeLoKGB
 |   Copyright: © 2015 - MiChAeLoKGB
-|   Version: 1.1.0
+|   Version: 1.1.1
 +---------------------------------------*/
  
 // Settings
@@ -54,7 +54,7 @@ class SmiteAPI{
 		if ($response === false){
 			$this->access_calls ++;
 			if ($this->access_calls >= $this->call_limit){ $this->access_calls = 0; return FALSE; }else{ return $this->accessAPI($request, $url, $format, $decodeJSON); }
-		} elseif ($response[0]->ret_msg === $this->session_valid_error){
+		} elseif (is_array($response) AND $response[0]->ret_msg === $this->session_valid_error){
 			$this->testSession(true);				
 			return $this->accessAPI($request, $url, $format, $decodeJSON);
 		}
