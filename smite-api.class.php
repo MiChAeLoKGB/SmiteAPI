@@ -3,7 +3,7 @@
 |   Filename: smite-api.class.php  
 |   Author: MiChAeLoKGB
 |   Copyright: © 2015 - MiChAeLoKGB
-|   Version: 1.0.0
+|   Version: 1.1.0
 +---------------------------------------*/
  
 // Settings
@@ -40,7 +40,7 @@ class SmiteAPI{
 		}
 	}
 
-	public function accessAPI($request, $url, $format = "JSON", $decodeJSON = true){
+	public function accessAPI($request, $url = "", $format = "JSON", $decodeJSON = true){
 
 		$url_prepend  = $this->dev_id ."/";
 		$url_prepend .= $this->createAuth($request) ."/";
