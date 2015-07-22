@@ -1,4 +1,4 @@
-# SmiteAPI
+# Smite API class
 
 Simple class that will allow you to use SmiteAPI quickly and with ease in just couple minutes.
 Example of usage can be found in index.php file.
