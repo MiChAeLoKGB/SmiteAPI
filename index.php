@@ -1,6 +1,6 @@
 <?php
 
-// database settings
+// DB settings
 $db_host = "";
 $db_port = "";
 $db_user = "";
@@ -11,22 +11,21 @@ $db_name = "";
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
 unset($db_host, $db_port, $db_user, $db_pass);
 
+if ($conn->connect_error) {
+    die("Connection failed: ".$conn->connect_error);
+}
+
+/*
+Dont forget to edit smite.class.php settings.
+As I am using already established connection here, I'll ignore host, port etc., and set db_conn like this:
+
+$smapi_settings["db_conn"] = $conn;
+*/
 
 include_once "smite.class.php";
 
-
-// Get session from database. Change this for your own DB call.
-$get_session = $conn->query("SELECT * FROM ".DB_SMITE_API." WHERE id='1'");
-$get_session->fetch_assoc();
-
-if ($get_session['timestamp'] <= time()){ 
-	$session = ""; // Empty session will force class to instantly create a new one
-}else{
-	$session = $get_session['session'];
-}
-
-$smite = new SmiteAPI($api_key, $dev_id, $api_url, $session);
-unset($api_key, $dev_id, $api_url, $session);
+$smite = new SmiteAPI($smapi_settings);
+unset($smapi_settings);
 
 
 // Mass check for replay files. Separate IDs by space or new line
