@@ -182,10 +182,10 @@ class SmiteAPI{
 		}
 	}
 
-	// Function to create table for storing sessions (creates table only once, still its good to romment out marked line in constructor).
+	// Function to create table for storing sessions (creates table only once, still its good to comment out marked line in constructor).
 	private function createTable(){
 		$request = 	"CREATE TABLE IF NOT EXISTS ".$this->db_table." 
-					(	id			INT(11) 	UNSIGNED	NOT NULL 	AUTO_INCREMENT,
+					(	id		INT(11)		UNSIGNED		NOT NULL 	AUTO_INCREMENT,
 						session 	TEXT 					NOT NULL,
 						timestamp 	TEXT 					NOT NULL,
 						PRIMARY KEY (id)
