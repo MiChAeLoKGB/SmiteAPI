@@ -22,10 +22,13 @@ As I am using already established connection here, I'll ignore host, port etc., 
 $smapi_settings["db_conn"] = $conn;
 */
 
+
+
 include_once "smite.class.php";
 
-$smite = new SmiteAPI($smapi_settings);
-unset($smapi_settings);
+$smite = new SmiteAPI($smapi_settings); // <-- This line will set SmiteAPI class to variable $smite. PC version of API will be used.
+//$smite = new SmiteAPI($smapi_settings, "XBOX"); <-- USE THIS LINE IF YOU WANT TO USE XBOX API (Can't use both at same time!).
+unset($smapi_settings); // Not really neccessary, but I recommend to use it.
 
 
 // Mass check for replay files. Separate IDs by space or new line
