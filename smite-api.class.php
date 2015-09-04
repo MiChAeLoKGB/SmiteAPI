@@ -3,7 +3,7 @@
 |   Filename: smite-api.class.php  
 |   Author: MiChAeLoKGB
 |   Copyright: © 2015 - MiChAeLoKGB
-|   Version: 1.2.0
+|   Version: 1.3.0
 +---------------------------------------*/
 
 // Settings
@@ -12,7 +12,8 @@ $smapi_settings = array();
 // You can get your API key and Dev ID from https://fs12.formsite.com/HiRez/form48/secure_index.html
 $smapi_settings["dev_id"] = 0;
 $smapi_settings["api_key"] = "";
-$smapi_settings["api_url"] = "http://api.smitegame.com/smiteapi.svc/";
+$smapi_settings["api_url"] = "http://api.smitegame.com/smiteapi.svc/"; // Url to get data about PC players/matches
+$smapi_settings["api_xurl"] = "http://api.xbox.smitegame.com/smiteapi.svc"; // Url to get data about xBox players/matches
 
 // Database settings (for storing sessions)
 $smapi_settings["db_prefix"] = ""; // If your table names in DB have any prefix (like fus145a_), put it here, otherwise, leave it empty
@@ -27,7 +28,7 @@ $smapi_settings["db_pass"] = ""; // Password to access the database
 
 /*
 
-To use this class, just use those three lines and you are ready to go:
+To use this class, just use those three lines and you are ready to go (if you want to use PC version either write PC instead of XBOX or dont type anything):
 
 include_once "smite.class.php";
 $variable = new SmiteAPI($smapi_settings);
@@ -41,6 +42,7 @@ class SmiteAPI{
 	private $dev_id;
 	private $api_url;
 	private $session;
+	private $session_id;
 
 	private $db_host;
 	private $db_port;
@@ -63,12 +65,19 @@ class SmiteAPI{
 	private $session_test = "successful";
 
 	// Contructor function is called every time when class is loaded and sets up all variables.
-	public function __construct($smapi_settings){
+	public function __construct($smapi_settings, $version = "PC"){
 
 		$this->api_key = $smapi_settings["api_key"];
 		$this->dev_id = $smapi_settings["dev_id"];
-		$this->api_url = $smapi_settings["api_url"];
 		$this->db_table = $smapi_settings["db_prefix"]."smapi_sessions";
+
+		if (strtoupper($version) === "XBOX"){
+			$this->api_url = $smapi_settings["api_xurl"];
+			$this->session_id = 2;
+		}else{
+			$this->api_url = $smapi_settings["api_url"];
+			$this->session_id = 1;
+		}
 
 		if ($smapi_settings["db_conn"] instanceof MySQLi){
 
@@ -114,6 +123,7 @@ class SmiteAPI{
 		$url = rtrim($url, "/");
 
 		$response = file_get_contents($this->api_url.$request.$format.$url);
+
 		if ($response === false){
 			$this->access_calls ++;
 			if ($this->access_calls >= $this->call_limit){ $this->access_calls = 0; return FALSE; }else{ return $this->accessAPI($request, $url, $format, $decodeJSON); }
@@ -132,7 +142,7 @@ class SmiteAPI{
 	public function hasReplay($result, $id = false){
 
 		if ($id !== false){
-			$response = $this->accessAPI("getmatchdetails", $result, "JSON", true);
+			$response = $this->accessAPI("getmatchdetails", $result);
 			return !empty($response) ? $response[0]->hasReplay === "y" : FALSE;
 		}else{
 			return !empty($result) ? $result[0]->hasReplay === "y" : FALSE;
@@ -146,7 +156,7 @@ class SmiteAPI{
 
 	// Function which asks the API for new session and then saves it in DB.
 	private function createSession(){
-		$response = $this->accessAPI("createsession", "", "JSON", true);
+		$response = $this->accessAPI("createsession");
 		if ($response->ret_msg === $this->session_ok){
 			return $this->accessDB("save_session", $response->session_id);
 		}else{
@@ -156,7 +166,7 @@ class SmiteAPI{
 
 	// Function that tests current session and if true is passed to it, automatically creates new session if current one is invalid.
 	private function testSession($create = false){
-		$response = $this->accessAPI("testsession", "", "JSON", true);
+		$response = $this->accessAPI("testsession");
 		if ($create){
 			if (strpos($response, $this->session_test) === false){
 				return $this->createSession();
@@ -192,6 +202,7 @@ class SmiteAPI{
 					) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
 		$this->smapi_conn->query($request);
 		$this->smapi_conn->query("INSERT INTO ".$this->db_table." (session, timestamp) VALUES ('', '0')");
+		$this->smapi_conn->query("INSERT INTO ".$this->db_table." (session, timestamp) VALUES ('', '0')");
 		$this->createSession();
 	}
 
@@ -204,7 +215,7 @@ class SmiteAPI{
 	// Function to get and save sessions to database.
 	private function accessDB($request, $session = ""){
 		if ($request === "get_session"){
-			$get_session = $this->smapi_conn->query("SELECT * FROM ".$this->db_table." WHERE id='1'");
+			$get_session = $this->smapi_conn->query("SELECT * FROM ".$this->db_table." WHERE id='".$this->session_id."'");
 			$session_data = $get_session->fetch_assoc();
 			if ($session_data["timestamp"] <= time()){
 				return $this->createSession();
@@ -212,7 +223,7 @@ class SmiteAPI{
 				$session = $session_data["session"];
 			}
 		}elseif($request === "save_session"){
-			$save = $this->smapi_conn->query("UPDATE ".$this->db_table." SET session='".$session."', timestamp='".(time()+870)."' WHERE id='1'");
+			$save = $this->smapi_conn->query("UPDATE ".$this->db_table." SET session='".$session."', timestamp='".(time()+870)."' WHERE id='".$this->session_id."'");
 		}
 		return $session;
 	}
