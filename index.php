@@ -19,7 +19,7 @@ if ($conn->connect_error) {
 Dont forget to edit smite.class.php settings.
 As I am using already established connection here, I'll ignore host, port etc., and set db_conn like this:
 
-$smapi_settings["db_conn"] = $conn;
+$smapi_settings["db_conn"] = &$conn; (the & before $conn menas its being passed as a refference, dont forget to use it)
 */
 
 
