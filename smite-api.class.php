@@ -17,7 +17,7 @@ $smapi_settings["api_xurl"] = "http://api.xbox.smitegame.com/smiteapi.svc"; // U
 
 // Database settings (for storing sessions)
 $smapi_settings["db_prefix"] = ""; // If your table names in DB have any prefix (like fus145a_), put it here, otherwise, leave it empty
-$smapi_settings["db_conn"] = 0; // If your site already has MySQLi connection established, put the variable ($connection not string "connection") here, so this class does not have to create new one
+$smapi_settings["db_conn"] = 0; // If your site already has MySQLi connection established, put the variable (&$connection not string "connection") as refference (with & before $) here, so this class can reuse existing connection
 
 // Those can be left empty if db_conn is set to use already established connection
 $smapi_settings["db_host"] = ""; // Host of the database -> localhost or something like mysqlXX.site.com
@@ -81,7 +81,7 @@ class SmiteAPI{
 
 		if ($smapi_settings["db_conn"] instanceof MySQLi){
 
-			$this->smapi_conn = $smapi_settings["db_conn"];
+			$this->smapi_conn = &$smapi_settings["db_conn"];
 
 		}elseif (!empty($smapi_settings["db_host"]) AND !empty($smapi_settings["db_port"]) AND !empty($smapi_settings["db_name"]) AND !empty($smapi_settings["db_user"]) AND !empty($smapi_settings["db_pass"])){
 
