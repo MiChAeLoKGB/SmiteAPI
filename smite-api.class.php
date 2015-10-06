@@ -17,7 +17,7 @@ $smapi_settings["api_xurl"] = "http://api.xbox.smitegame.com/smiteapi.svc"; // U
 
 // Database settings (for storing sessions)
 $smapi_settings["db_prefix"] = ""; // If your table names in DB have any prefix (like fus145a_), put it here, otherwise, leave it empty
-$smapi_settings["db_conn"] = 0; // If your site already has MySQLi connection established, put the variable (&$connection not string "connection") as refference (with & before $) here, so this class can reuse existing connection
+$smapi_settings["db_conn"] = 0; // If your site already has MySQLi connection established, put the variable (&$connection not string "connection") as reference (with & before $) here, so this class can reuse existing connection
 
 // Those can be left empty if db_conn is set to use already established connection
 $smapi_settings["db_host"] = ""; // Host of the database -> localhost or something like mysqlXX.site.com
@@ -28,10 +28,11 @@ $smapi_settings["db_pass"] = ""; // Password to access the database
 
 /*
 
-To use this class, just use those three lines and you are ready to go (if you want to use PC version either write PC instead of XBOX or dont type anything):
+To use this class, just use those three lines and you are ready to go (if you want to use PC version either write PC instead of XBOX or remove second parameter).
+Working example (you just need to fill DB connection data) is in index.php file.
 
 include_once "smite.class.php";
-$variable = new SmiteAPI($smapi_settings);
+$variable = new SmiteAPI($smapi_settings, "XBOX");
 unset($smapi_settings);
 
 */
