@@ -107,8 +107,6 @@ class SmiteAPI{
 
 		if ($this->session === FALSE){
 			throw new Exception("Failed to get/create session on load!");
-		}elseif ($this->our_conn){
-			$this->databaseCONN("close");
 		}
 	}
 
