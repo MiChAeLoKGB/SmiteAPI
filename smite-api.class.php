@@ -31,7 +31,7 @@ $smapi_settings["db_pass"] = ""; // Password to access the database
 To use this class, just use those three lines and you are ready to go (if you want to use PC version either write PC instead of XBOX or remove second parameter).
 Working example (you just need to fill DB connection data) is in index.php file.
 
-include_once "smite.class.php";
+include_once "smite-api.class.php";
 $variable = new SmiteAPI($smapi_settings, "XBOX");
 unset($smapi_settings);
 
