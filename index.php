@@ -27,7 +27,9 @@ $smapi_settings["db_conn"] = &$conn; (the & before $conn menas its being passed 
 include_once "smite-api.class.php";
 
 $smite = new SmiteAPI($smapi_settings); // <-- This line will set SmiteAPI class to variable $smite. PC version of API will be used.
-//$smite = new SmiteAPI($smapi_settings, "XBOX"); <-- USE THIS LINE IF YOU WANT TO USE XBOX API (Can't use both at same time! You would have to declare PC to one variable and xBox to another.).
+// You can't use multiple API's (xbox, pc, ps4) at same time! You will have to declare PC to one variable and xBox to another...
+//$smite = new SmiteAPI($smapi_settings, "XBOX"); <-- USE THIS LINE IF YOU WANT TO USE XBOX API.
+//$smite = new SmiteAPI($smapi_settings, "PS4"); <-- USE THIS LINE IF YOU WANT TO USE PS4 API
 unset($smapi_settings); // Not really neccessary, but I recommend to use it.
 
 
