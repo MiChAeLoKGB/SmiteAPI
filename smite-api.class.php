@@ -3,7 +3,7 @@
 |   Filename: smite-api.class.php  
 |   Author: MiChAeLoKGB
 |   Copyright: © 2015 - MiChAeLoKGB
-|   Version: 1.3.0
+|   Version: 1.4.0
 +---------------------------------------*/
 
 // Settings
@@ -14,6 +14,7 @@ $smapi_settings["dev_id"] = 0;
 $smapi_settings["api_key"] = "";
 $smapi_settings["api_url"] = "http://api.smitegame.com/smiteapi.svc/"; // Url to get data about PC players/matches
 $smapi_settings["api_xurl"] = "http://api.xbox.smitegame.com/smiteapi.svc"; // Url to get data about xBox players/matches
+$smapi_settings["api_purl"] = "http://api.ps4.smitegame.com/smiteapi.svc"; // Url to get data about PS4 players/matches
 
 // Database settings (for storing sessions)
 $smapi_settings["db_prefix"] = ""; // If your table names in DB have any prefix (like fus145a_), put it here, otherwise, leave it empty
@@ -28,7 +29,7 @@ $smapi_settings["db_pass"] = ""; // Password to access the database
 
 /*
 
-To use this class, just use those three lines and you are ready to go (if you want to use PC version either write PC instead of XBOX or remove second parameter).
+To use this class, just use those three lines and you are ready to go (You can use PC, XBOX or PS4 version. TO use PC you can remove second parameter).
 Working example (you just need to fill DB connection data) is in index.php file.
 
 include_once "smite-api.class.php";
@@ -75,6 +76,9 @@ class SmiteAPI{
 		if (strtoupper($version) === "XBOX"){
 			$this->api_url = $smapi_settings["api_xurl"];
 			$this->session_id = 2;
+		}else if (strtoupper($version) === "PS4"){
+			$this->api_url = $smapi_settings["api_purl"];
+			$this->session_id = 3;
 		}else{
 			$this->api_url = $smapi_settings["api_url"];
 			$this->session_id = 1;
