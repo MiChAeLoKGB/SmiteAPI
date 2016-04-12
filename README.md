@@ -2,7 +2,7 @@
 
 ## Requirements
 * **PHP 5.4+**
-* **MySQL database**
+* **MySQL database or MariaDB**
 
 ## Description
 
