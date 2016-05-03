@@ -2,8 +2,8 @@
 /*--------------------------------------+
 |   Filename: smite-api.class.php  
 |   Author: MiChAeLoKGB
-|   Copyright: © 2015 - MiChAeLoKGB
-|   Version: 1.4.0
+|   Copyright: © 2016 - MiChAeLoKGB
+|   Version: 1.4.5
 +---------------------------------------*/
 
 // Settings
@@ -29,7 +29,7 @@ $smapi_settings["db_pass"] = ""; // Password to access the database
 
 /*
 
-To use this class, just use those three lines and you are ready to go (You can use PC, XBOX or PS4 version. TO use PC you can remove second parameter).
+To use this class, just use those three lines and you are ready to go (You can use PC, XBOX or PS4 version. To use PC you can remove second parameter).
 Working example (you just need to fill DB connection data) is in index.php file.
 
 include_once "smite-api.class.php";
@@ -122,8 +122,7 @@ class SmiteAPI{
 		$url_prepend .= $request !== "createsession" ? $this->session."/" : "";
 		$url_prepend .= gmdate('YmdHis')."/";
 
-		$url = "/".$url_prepend.$url;		
-		$url = rtrim($url, "/");
+		$url = rtrim("/".$url_prepend.$url, "/");
 
 		$response = file_get_contents($this->api_url.$request.$format.$url);
 
@@ -195,17 +194,17 @@ class SmiteAPI{
 		}
 	}
 
-	// Function to create table for storing sessions (creates table only once, still its good to comment out marked line in constructor).
+	// Function to create table for storing sessions (creates table only once, still its good to comment out marked lines in constructor).
 	private function createTable(){
-		$request = 	"CREATE TABLE IF NOT EXISTS ".$this->db_table." 
-					(	id		INT(11)		UNSIGNED		NOT NULL 	AUTO_INCREMENT,
-						session 	TEXT 					NOT NULL,
-						timestamp 	TEXT 					NOT NULL,
-						PRIMARY KEY (id)
-					) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
+		$request = "CREATE TABLE IF NOT EXISTS ".$this->db_table." 
+			(	id		INT(11)		UNSIGNED		NOT NULL 	AUTO_INCREMENT,
+				session 	TEXT 					NOT NULL,
+				timestamp 	TEXT 					NOT NULL,
+				PRIMARY KEY (id)
+			) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
 		$this->smapi_conn->query($request);
-		$this->smapi_conn->query("INSERT INTO ".$this->db_table." (session, timestamp) VALUES ('', '0')");
-		$this->smapi_conn->query("INSERT INTO ".$this->db_table." (session, timestamp) VALUES ('', '0')");
+		// Insert 3 dummy sessions for PC, XBOX and PS4 to DB.
+		$this->smapi_conn->query("INSERT INTO ".$this->db_table." (session, timestamp) VALUES ('', '0'), ('', '0'), ('', '0');");
 		$this->createSession();
 	}
 
